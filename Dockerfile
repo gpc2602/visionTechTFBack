@@ -6,14 +6,14 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
-RUN mvn clean package -DskipTests
+# 🔥 Este es el cambio clave: Fuerza UTF-8
+RUN mvn clean package -DskipTests -Dproject.build.sourceEncoding=UTF-8
 
 # Etapa 2: Imagen final con solo el .jar (Run Stage)
 FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
-# Copiamos el .jar compilado de la etapa anterior
 COPY --from=build /app/target/visiontech2-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
